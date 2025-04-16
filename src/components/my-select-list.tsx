@@ -4,7 +4,7 @@ export const MySelectList = () => {
   const list = ComponentList;
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {Object.entries(list).map(([key, Component]) => (
         <div
           key={key}

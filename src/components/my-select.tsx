@@ -7,6 +7,7 @@ import Select, {
 } from "react-select";
 import { GroupedOption, groupedOptions, Option } from "../data/data";
 import { runDebugger } from "../util/debug";
+import React from "react";
 
 const options = [
   { value: "chocolate", label: "Chocolate" },
@@ -172,6 +173,101 @@ const WithAction = () => {
   );
 };
 
+const CustomMenuItem = () => {
+  return (
+    <Select<Option, true>
+      options={options}
+      isMulti
+      styles={{
+        control: (base) => ({ ...base, width: 300 }),
+        option: (base) => ({ ...base }),
+      }}
+      components={{
+        Option: (props) => (
+          <components.Option {...props}>
+            <div className="flex items-center">
+              <img
+                className="w-6 h-6 mr-2"
+                src="https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png"
+              />
+              {props.children}
+            </div>
+          </components.Option>
+        ),
+        SingleValue: (props) => (
+          <components.SingleValue {...props}>
+            <div className="flex items-center">
+              <img
+                className="w-6 h-6 mr-2"
+                src="https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png"
+              />
+              {props.children}
+            </div>
+          </components.SingleValue>
+        ),
+        MultiValue: (props) => (
+          <components.MultiValue {...props}>
+            <div className="flex items-center">
+              <img
+                className="w-6 h-6 mr-2"
+                src="https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png"
+              />
+              {props.children}
+            </div>
+          </components.MultiValue>
+        ),
+      }}
+      menuPlacement="auto"
+    />
+  );
+};
+
+const NoMultiValue = () => {
+  const [selected, setSelected] = React.useState<readonly Option[]>([]);
+  return (
+    <div>
+      <Select<Option, true>
+        options={options}
+        value={selected}
+        isMulti
+        styles={{
+          control: (base) => ({ ...base, width: 300 }),
+          option: (base) => ({ ...base }),
+        }}
+        components={{
+          MultiValue: () => null,
+          ClearIndicator: () => null,
+        }}
+        menuPlacement="auto"
+        onChange={(newValue, actionMeta) => {
+          console.log({ newValue, actionMeta });
+          setSelected(newValue);
+        }}
+      />
+      <div>
+        {selected.map((item) => (
+          <div
+            key={item.value}
+            className="flex items-center justify-between bg-gray-200 p-2 m-2 rounded"
+          >
+            <span>{item.label}</span>
+            <button
+              onClick={() => {
+                setSelected((prev) =>
+                  prev.filter((option) => option.value !== item.value)
+                );
+              }}
+              className="text-red-500"
+            >
+              x
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 runDebugger(false);
 
 export const ComponentList = {
@@ -181,4 +277,6 @@ export const ComponentList = {
   CustomGroup,
   NoIndicatorWithAutoMenuPlacement,
   WithAction,
+  CustomMenuItem,
+  NoMultiValue,
 };
