@@ -1,4 +1,5 @@
-export const runDebugger = (ms: number = 3000) => {
+export const runDebugger = (run: boolean = false, ms: number = 3000) => {
+  if (!run) return;
   setTimeout(() => {
     // eslint-disable-next-line no-debugger
     debugger;
